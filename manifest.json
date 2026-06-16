@@ -1,0 +1,50 @@
+{
+  "name": "Meridian EX-IM",
+  "short_name": "Meridian EX-IM",
+  "description": "Global Trade & Export Solutions - Connecting quality products with global markets",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#B2B4BC",
+  "theme_color": "#B2B4BC",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "images/logo.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "images/logo.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "images/favicon.webp",
+      "sizes": "64x64",
+      "type": "image/webp",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Get Quote",
+      "url": "/#contact",
+      "description": "Request a quote for your trade needs"
+    },
+    {
+      "name": "Explore Products",
+      "url": "/#products",
+      "description": "View our product categories"
+    }
+  ],
+  "categories": ["business", "shopping", "productivity"],
+  "screenshots": [
+    {
+      "src": "images/hero.webp",
+      "sizes": "1280x720",
+      "type": "image/webp"
+    }
+  ]
+}

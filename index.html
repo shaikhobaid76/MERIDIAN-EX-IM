@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Meridian EX‑IM · Global Trade</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="images/logo.webp" />
+  <meta name="theme-color" content="#B2B4BC" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="icon" type="image/webp" href="images/favicon.webp" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=TT+Firs+Neue:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { width:100%; overflow-x:hidden; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8f9fc;
+      color: #1a1e2b;
+    }
+    .container { max-width: 100%; padding: 0 20px; }
+    @media (min-width: 1400px) { .container { padding: 0 40px; } }
+
+    h1,h2,h3,h4,.heading-font {
+      font-family: 'TT Firs Neue', sans-serif;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    a { text-decoration: none; color: inherit; cursor: pointer; }
+    img { display: block; max-width: 100%; }
+
+    .btn-primary {
+      background: #1a1e2b;
+      color: #fff;
+      padding: 14px 32px;
+      border-radius: 40px;
+      font-weight: 600;
+      border: none;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .btn-primary:hover { background: #2d3446; transform: scale(1.02); box-shadow: 0 12px 28px rgba(0,0,0,0.15); }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid #1a1e2b;
+      padding: 14px 32px;
+      border-radius: 40px;
+      font-weight: 600;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .btn-outline:hover { background: #1a1e2b; color: #fff; transform: scale(1.02); }
+    .magnetic { display: inline-block; transition: transform 0.15s ease; cursor: pointer; }
+
+    #loader {
+      position: fixed; inset:0; z-index:9999;
+      background: #B2B4BC;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap:24px;
+      transition: opacity 0.8s, visibility 0.8s;
+    }
+    #loader.hidden { opacity:0; visibility:hidden; }
+    .loader-logo { width: 140px; animation: pulse 1.2s infinite alternate; }
+    @keyframes pulse { 0%{opacity:0.4;transform:scale(0.95);} 100%{opacity:1;transform:scale(1.05);} }
+
+    #scroll-progress {
+      position: fixed; top:0; left:0; height:3px; background: #1a1e2b;
+      width:0%; z-index:999; transition: width 0.1s;
+    }
+
+    nav {
+      position: fixed; top:0; left:0; right:0; padding: 12px 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      z-index:100;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .nav-logo { cursor: pointer; }
+    .nav-logo img { height: 48px; }
+    .nav-links {
+      display: flex; gap: 24px; font-weight: 500; font-size:0.9rem;
+    }
+    .nav-links a { cursor: pointer; transition: color 0.2s; color: #1a1e2b; }
+    .nav-links a:hover { color: #4a4f62; }
+    .menu-toggle {
+      display: none; font-size: 1.8rem; cursor: pointer; color: #1a1e2b;
+      background: none; border: none; padding: 4px 8px;
+    }
+
+    .sidebar {
+      position: fixed; top:0; right:-320px; width:300px; height:100%;
+      background: rgba(255,255,255,0.96); backdrop-filter: blur(12px);
+      z-index:200; padding:80px 24px 40px;
+      transition: right 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: -8px 0 32px rgba(0,0,0,0.06);
+      overflow-y:auto;
+    }
+    .sidebar.open { right:0; }
+    .sidebar .close-btn {
+      position: absolute; top:16px; right:20px;
+      font-size: 2rem; background:none; border:none; cursor:pointer;
+      color:#1a1e2b; opacity:0.6;
+    }
+    .sidebar a {
+      display: block; padding:14px 0; font-weight:500; font-size:1.1rem;
+      border-bottom:1px solid #eee; transition:0.2s; cursor:pointer;
+    }
+    .sidebar a:hover { opacity:0.6; padding-left:8px; }
+    .sidebar-overlay {
+      position:fixed; inset:0; z-index:150;
+      background:rgba(0,0,0,0.2); display:none;
+    }
+    .sidebar-overlay.active { display:block; }
+
+    .hero {
+      min-height: 100vh;
+      background: #B2B4BC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 0 30px;
+      position: relative;
+      overflow: hidden;
+      flex-direction: column;
+    }
+    .world-map-bg {
+      position: absolute; inset:0; opacity:0.08;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500"><path fill="none" stroke="%231a1e2b" stroke-width="1.5" d="M100,200 Q200,100 300,180 T500,150 T700,220 L750,300 L600,350 L400,320 L200,340 L80,280 Z"/><circle cx="200" cy="180" r="4" fill="%231a1e2b"/><circle cx="500" cy="150" r="4" fill="%231a1e2b"/><circle cx="700" cy="220" r="4" fill="%231a1e2b"/></svg>') center/cover;
+      pointer-events:none;
+      animation: subtleDrift 30s infinite alternate;
+    }
+    @keyframes subtleDrift { 0%{transform:scale(1) translateX(0);} 100%{transform:scale(1.05) translateX(-2%);} }
+    .hero-content {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 10px 0 0;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-image {
+      width: 100%;
+      max-width: 750px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-image img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      display: block;
+    }
+    .hero-content .sub-head { 
+      font-size: 1.8rem; 
+      font-weight: 600; 
+      opacity: 0.9; 
+      margin-bottom: 6px; 
+    }
+    .hero-content p { 
+      font-size: 1.1rem; 
+      opacity: 0.7; 
+      max-width: 600px; 
+      margin: 0 auto 16px; 
+    }
+    .hero-actions { 
+      display: flex; 
+      gap: 16px; 
+      justify-content: center; 
+      flex-wrap: wrap; 
+      margin-top: 2px;
+    }
+
+    section { padding:80px 0; position:relative; }
+    .section-title { font-size:2.8rem; margin-bottom:48px; }
+
+    .flip-card {
+      perspective:1200px; width:380px; height:440px; margin:0 auto;
+    }
+    .flip-inner {
+      position:relative; width:100%; height:100%;
+      transition: transform 0.8s cubic-bezier(0.2,0.8,0.2,1);
+      transform-style:preserve-3d;
+    }
+    .flip-card:hover .flip-inner { transform:rotateY(180deg); }
+    .flip-front, .flip-back {
+      position:absolute; width:100%; height:100%; backface-visibility:hidden;
+      border-radius:28px; overflow:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.06);
+      display:flex; align-items:center; justify-content:center;
+      flex-direction:column; text-align:center;
+    }
+    .flip-front {
+      background:white;
+      padding:0;
+    }
+    .flip-front img { 
+      width:100%; height:85%; object-fit:cover; border-radius:28px 28px 0 0;
+    }
+    .flip-front .founder-info {
+      height:15%; display:flex; flex-direction:column; align-items:center; 
+      justify-content:center; padding:6px 0;
+    }
+    .flip-front .founder-name {
+      font-weight:700; font-size:1.3rem; letter-spacing:0.04em; color:#1a1e2b;
+    }
+    .flip-front .founder-title {
+      font-size:0.8rem; opacity:0.6;
+    }
+    .flip-back {
+      transform:rotateY(180deg);
+      background:#1a1e2b; color:white;
+      padding:0;
+    }
+    .flip-back img {
+      width:100%; height:100%; object-fit:contain; padding:30px;
+      background:rgba(255,255,255,0.03);
+    }
+
+    .founder-grid {
+      display:grid; grid-template-columns: auto 1fr; gap:40px; align-items:start;
+    }
+    .founder-message { 
+      background:white; padding:32px; border-radius:24px; 
+      box-shadow:0 8px 24px rgba(0,0,0,0.04);
+    }
+    .founder-goals {
+      background:white; padding:28px; border-radius:24px; 
+      box-shadow:0 8px 20px rgba(0,0,0,0.02);
+    }
+
+    .product-scroll {
+      display: flex; gap:28px; overflow-x:auto; padding:16px 4px 32px;
+      scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
+    }
+    .product-scroll::-webkit-scrollbar { height:6px; }
+    .product-scroll::-webkit-scrollbar-track { background:#e9ecf0; border-radius:10px; }
+    .product-scroll::-webkit-scrollbar-thumb { background:#1a1e2b; border-radius:10px; }
+    .product-card-h {
+      flex:0 0 280px; background:white; border-radius:24px; padding:20px;
+      border:1px solid #eee; scroll-snap-align:start; transition:0.3s;
+      box-shadow:0 4px 12px rgba(0,0,0,0.02); cursor:pointer;
+    }
+    .product-card-h:hover { transform:translateY(-8px); box-shadow:0 20px 40px rgba(0,0,0,0.08); }
+    .product-card-h img { width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:16px; background:#f0f2f5; margin-bottom:14px; }
+    .product-card-h h4 { font-size:1.2rem; }
+    .product-card-h p { font-size:0.9rem; opacity:0.6; margin:4px 0 10px; }
+
+    /* ----- UNIFIED CARD STYLES (Gray, same height/width) ----- */
+    .service-grid.trade-services,
+    .service-grid.why-grid,
+    .service-grid.process-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .service-grid.trade-services .service-card,
+    .service-grid.why-grid .why-card,
+    .service-grid.process-grid .service-card {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 24px 32px;
+      background: #eef0f4;
+      border-radius: 24px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+      border: 1px solid #d9dce4;
+      opacity: 0;
+      transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      width: 100%;
+      min-height: 120px;
+      max-width: 700px;
+    }
+
+    .service-grid.trade-services .service-card.visible,
+    .service-grid.why-grid .why-card.visible,
+    .service-grid.process-grid .service-card.visible {
+      opacity: 1;
+    }
+
+    /* Zigzag: odd cards left, even cards right */
+    .service-grid.trade-services .service-card:nth-child(odd),
+    .service-grid.why-grid .why-card:nth-child(odd),
+    .service-grid.process-grid .service-card:nth-child(odd) {
+      transform: translateX(-80px);
+      flex-direction: row;
+      margin-right: auto;
+      margin-left: 0;
+    }
+    .service-grid.trade-services .service-card:nth-child(odd).visible,
+    .service-grid.why-grid .why-card:nth-child(odd).visible,
+    .service-grid.process-grid .service-card:nth-child(odd).visible {
+      transform: translateX(0);
+    }
+
+    .service-grid.trade-services .service-card:nth-child(even),
+    .service-grid.why-grid .why-card:nth-child(even),
+    .service-grid.process-grid .service-card:nth-child(even) {
+      transform: translateX(80px);
+      flex-direction: row-reverse;
+      text-align: right;
+      margin-left: auto;
+      margin-right: 0;
+    }
+    .service-grid.trade-services .service-card:nth-child(even).visible,
+    .service-grid.why-grid .why-card:nth-child(even).visible,
+    .service-grid.process-grid .service-card:nth-child(even).visible {
+      transform: translateX(0);
+    }
+
+    /* Card icons */
+    .service-grid.trade-services .service-card .card-icon,
+    .service-grid.why-grid .why-card .card-icon,
+    .service-grid.process-grid .service-card .card-icon {
+      width: 72px;
+      height: 72px;
+      min-width: 72px;
+      background: #d9dce4;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-size: 2rem;
+      color: #1a1e2b;
+    }
+    .service-grid.trade-services .service-card .card-icon img,
+    .service-grid.why-grid .why-card .card-icon img,
+    .service-grid.process-grid .service-card .card-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .service-grid.trade-services .service-card .card-text h4,
+    .service-grid.why-grid .why-card h4,
+    .service-grid.process-grid .service-card h4 {
+      font-size: 1.2rem;
+      margin: 0;
+    }
+    .service-grid.trade-services .service-card .card-text p {
+      font-size: 0.95rem;
+      opacity: 0.6;
+      margin: 4px 0 0;
+    }
+
+    .service-grid.trade-services .service-card:nth-child(odd) .card-text,
+    .service-grid.why-grid .why-card:nth-child(odd) .card-text,
+    .service-grid.process-grid .service-card:nth-child(odd) .card-text {
+      margin-left: 0;
+    }
+    .service-grid.trade-services .service-card:nth-child(even) .card-text,
+    .service-grid.why-grid .why-card:nth-child(even) .card-text,
+    .service-grid.process-grid .service-card:nth-child(even) .card-text {
+      margin-right: 0;
+    }
+
+    /* Process arrow wrapper (only visible on mobile) */
+    .process-item-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    .process-item-wrapper .process-arrow {
+      display: none;
+      font-size: 1.6rem;
+      color: #1a1e2b;
+      opacity: 0.25;
+      padding: 6px 0;
+      text-align: center;
+    }
+
+    .cert-grid {
+      display: flex; gap: 80px; flex-wrap: wrap; align-items: center;
+      justify-content: center;
+    }
+    .cert-grid img {
+      height: 120px;
+      filter: grayscale(0.2);
+      transition: 0.4s;
+      opacity: 0.6;
+      transform: scale(0.95);
+    }
+    .cert-grid img.visible { opacity:1; transform:scale(1); filter:grayscale(0); }
+
+    .gallery-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+    .gallery-grid .gallery-item {
+      background: #d9dce4;
+      aspect-ratio: 1/1;
+      border-radius: 20px;
+      transition: 0.4s;
+      opacity:0; transform:scale(0.9);
+    }
+    .gallery-grid .gallery-item.visible {
+      opacity:1; transform:scale(1);
+    }
+    .gallery-grid .gallery-item:hover { transform: scale(1.02); box-shadow: 0 12px 24px rgba(0,0,0,0.05); }
+
+    .cta-premium {
+      background:#1a1e2b; color:white; border-radius:40px; padding:60px 40px;
+      text-align:center; margin:40px 0;
+    }
+    .cta-premium .btn-outline { border-color:white; color:white; }
+    .cta-premium .btn-outline:hover { background:white; color:#1a1e2b; }
+
+    footer { background:#f0f2f6; padding:40px 0; border-top:1px solid #ddd; }
+    .footer-grid {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 20px;
+    }
+    .footer-links { display: flex; gap: 28px; }
+    .footer-links a { font-size:0.9rem; opacity:0.7; transition:0.2s; cursor:pointer; }
+    .footer-links a:hover { opacity:1; }
+    .social-icons a {
+      margin-left: 20px; font-size: 1.5rem; color: #1a1e2b;
+      opacity: 0.6; transition: 0.2s;
+    }
+    .social-icons a:hover { opacity:1; transform: scale(1.05); }
+
+    .video-container {
+      position:relative; width:100%; max-width:900px; margin:0 auto;
+      border-radius:32px; overflow:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.04);
+      background:#000;
+    }
+    .video-container video { width:100%; display:block; aspect-ratio:16/9; object-fit:cover; }
+
+    .lightbox {
+      display: none; position:fixed; inset:0; z-index:1000;
+      background:rgba(0,0,0,0.85); align-items:center; justify-content:center;
+      padding:40px; cursor:pointer;
+    }
+    .lightbox.active { display:flex; }
+    .lightbox img { max-width:90%; max-height:90%; border-radius:16px; object-fit:contain; box-shadow:0 24px 48px rgba(0,0,0,0.3); }
+    .lightbox .close { position:absolute; top:20px; right:30px; font-size:2.5rem; color:white; opacity:0.7; transition:0.3s; }
+    .lightbox .close:hover { opacity:1; }
+
+    .legal-page {
+      position: fixed; inset:0; z-index:300;
+      max-width:800px; margin:auto; padding:40px 32px;
+      background:white; border-radius:32px; box-shadow:0 24px 64px rgba(0,0,0,0.15);
+      display:none; overflow-y:auto; max-height:90vh;
+    }
+    .legal-page.active { display:block; }
+    .legal-page h1 { font-size:2.2rem; margin-bottom:24px; }
+    .legal-page p { line-height:1.8; opacity:0.8; margin-bottom:16px; }
+    .legal-overlay {
+      position:fixed; inset:0; z-index:250;
+      background:rgba(0,0,0,0.4); display:none;
+    }
+    .legal-overlay.active { display:block; }
+
+    .founder-text-block {
+      display: flex; flex-direction: column; gap:24px;
+    }
+
+    /* ----- MOBILE ADJUSTMENTS ----- */
+    @media (max-width: 900px) {
+      .nav-links { display:none; }
+      .menu-toggle { display:block; }
+      .service-grid.trade-services .service-card,
+      .service-grid.why-grid .why-card,
+      .service-grid.process-grid .service-card {
+        transform: translateX(0) !important;
+        flex-direction: row !important;
+        text-align: left !important;
+        margin: 0 auto !important;
+        max-width: 100%;
+        min-height: 100px;
+      }
+      .service-grid.trade-services .service-card .card-text,
+      .service-grid.why-grid .why-card .card-text,
+      .service-grid.process-grid .service-card .card-text {
+        margin: 0 !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container { padding: 0 16px; }
+      .hero { padding:70px 0 15px; }
+      .section-title { font-size:2rem; margin-bottom:32px; }
+      .sidebar { width:280px; right:-280px; }
+      .hero-image img { height: 160px; }
+      .service-grid.trade-services .service-card,
+      .service-grid.why-grid .why-card,
+      .service-grid.process-grid .service-card {
+        padding: 16px 18px;
+        gap: 16px;
+        min-height: 80px;
+        max-width: 100%;
+        margin: 0 !important;
+        transform: translateX(0) !important;
+        flex-direction: row !important;
+        text-align: left !important;
+      }
+      .service-grid.trade-services .service-card .card-icon,
+      .service-grid.why-grid .why-card .card-icon,
+      .service-grid.process-grid .service-card .card-icon {
+        width: 56px;
+        height: 56px;
+        min-width: 56px;
+      }
+      .service-grid.trade-services .service-card .card-text h4,
+      .service-grid.why-grid .why-card h4,
+      .service-grid.process-grid .service-card h4 {
+        font-size: 1rem;
+      }
+      .service-grid.trade-services .service-card .card-text p {
+        font-size: 0.8rem;
+      }
+      /* Show arrows on mobile for process */
+      .process-item-wrapper .process-arrow {
+        display: block !important;
+        font-size: 1.8rem;
+        color: #1a1e2b;
+        opacity: 0.3;
+        padding: 8px 0;
+        text-align: center;
+        transition: opacity 0.3s;
+        letter-spacing: 0.5px;
+        font-weight: 300;
+      }
+      .process-item-wrapper .process-arrow i {
+        background: rgba(26,30,43,0.06);
+        padding: 8px 14px;
+        border-radius: 30px;
+        font-size: 1.4rem;
+        border: 1px solid rgba(26,30,43,0.08);
+        backdrop-filter: blur(2px);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      }
+      .process-item-wrapper:last-child .process-arrow {
+        display: none !important;
+      }
+      .gallery-grid { grid-template-columns: 1fr; gap:16px; max-width:400px; margin:0 auto; }
+      .cert-grid { gap:40px; }
+      .cert-grid img { height:80px; }
+      .cta-premium { padding:40px 20px; }
+      .footer-grid { flex-direction:column; align-items:center; text-align:center; }
+      .footer-links { flex-wrap:wrap; justify-content:center; gap:16px; }
+      .product-card-h { flex:0 0 200px; padding:14px; }
+      .hero-content .sub-head { font-size:1.3rem; }
+      .hero-content p { font-size:1rem; margin-bottom:12px; }
+      .hero-actions { gap:10px; }
+      
+      /* Fix About section mobile visibility */
+      .founder-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+      .flip-card {
+        width: 100%;
+        max-width: 320px;
+        height: 380px;
+        margin: 0 auto;
+      }
+      .founder-message, .founder-goals {
+        padding: 24px 20px;
+      }
+      .founder-message h3, .founder-goals h4 {
+        font-size: 1.2rem;
+      }
+      .founder-message p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+      .founder-message div {
+        gap: 16px !important;
+        font-size: 0.9rem;
+      }
+      .founder-goals ul {
+        font-size: 0.95rem !important;
+        line-height: 2.2 !important;
+      }
+      /* Restore zigzag animation on mobile */
+      .service-grid.why-grid .why-card,
+      .service-grid.process-grid .service-card {
+        opacity: 0;
+        transform: translateX(-30px) !important;
+        transition: all 0.5s ease !important;
+      }
+      .service-grid.why-grid .why-card.visible,
+      .service-grid.process-grid .service-card.visible {
+        opacity: 1;
+        transform: translateX(0) !important;
+      }
+      .service-grid.why-grid .why-card:nth-child(even),
+      .service-grid.process-grid .service-card:nth-child(even) {
+        transform: translateX(30px) !important;
+      }
+      .service-grid.why-grid .why-card:nth-child(even).visible,
+      .service-grid.process-grid .service-card:nth-child(even).visible {
+        transform: translateX(0) !important;
+      }
+    }
+    @media (max-width: 480px) {
+      .hero-content .sub-head { font-size:1.1rem; }
+      .hero-actions .btn-primary, .hero-actions .btn-outline { padding:10px 18px; font-size:0.8rem; }
+      .product-card-h { flex:0 0 170px; padding:10px; }
+      .loader-logo { width: 100px; }
+      .hero-image img { height: 130px; }
+      .flip-card {
+        max-width: 280px;
+        height: 340px;
+      }
+      .founder-message, .founder-goals {
+        padding: 20px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="loader">
+    <img src="images/logo1.webp" alt="Meridian EX-IM" class="loader-logo" />
+  </div>
+  <div id="scroll-progress"></div>
+
+  <nav>
+    <div class="nav-logo" id="logoHome">
+      <img src="images/logo.webp" alt="Meridian EX-IM" />
+    </div>
+    <div class="nav-links">
+      <a data-target="home">Home</a>
+      <a data-target="about">About</a>
+      <a data-target="products">Products</a>
+      <a data-target="services">Services</a>
+      <a data-target="process">Trade Process</a>
+      <a data-target="certificates">Certificates</a>
+      <a data-target="gallery">Gallery</a>
+      <a data-target="contact">Contact</a>
+    </div>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+      <i class="fas fa-bars"></i>
+    </button>
+  </nav>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <div class="sidebar" id="sidebar">
+    <button class="close-btn" id="closeSidebar">&times;</button>
+    <a data-target="home">Home</a>
+    <a data-target="about">About</a>
+    <a data-target="products">Products</a>
+    <a data-target="services">Services</a>
+    <a data-target="process">Trade Process</a>
+    <a data-target="certificates">Certificates</a>
+    <a data-target="gallery">Gallery</a>
+    <a data-target="contact">Contact</a>
+  </div>
+
+  <section class="hero" id="home">
+    <div class="world-map-bg"></div>
+    <div class="container" style="width:100%;">
+      <div class="hero-image">
+        <img src="images/hero.webp" alt="Meridian EX-IM" />
+      </div>
+      <div class="hero-content">
+        <div class="sub-head">Global Trade & Export Solutions</div>
+        <p>Connecting quality products with global markets through reliable sourcing, packaging, and trade solutions.</p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn-primary magnetic" onclick="event.preventDefault(); scrollToSection('contact');"><i class="fas fa-paper-plane"></i> Get Quote</a>
+          <a class="btn-outline magnetic" id="exploreProductsBtn">Explore Products</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" style="background:white; padding:10px 0;"></section>
+
+  <section id="about">
+    <div class="container">
+      <h2 class="section-title">Founder & Vision</h2>
+      <div class="founder-grid">
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <img src="images/founder.webp" alt="Founder" />
+              <div class="founder-info">
+                <div class="founder-name">OBAIDULLAH SHAIKH</div>
+                <div class="founder-title">Founder</div>
+              </div>
+            </div>
+            <div class="flip-back">
+              <img src="images/logo1.webp" alt="Meridian EX-IM" />
+            </div>
+          </div>
+        </div>
+        <div class="founder-text-block">
+          <div class="founder-message">
+            <h3>Founder Message</h3>
+            <p style="margin-top:12px; line-height:1.7;">With over a decade in global trade, we believe in transparency, quality, and long-term partnerships. Our mission is to simplify export-import for businesses worldwide.</p>
+            <div style="margin-top:20px; display:flex; gap:30px; flex-wrap:wrap;">
+              <span><strong>Vision:</strong> Empower 1000+ suppliers</span>
+              <span><strong>Future:</strong> Expand to 20+ markets</span>
+            </div>
+          </div>
+          <div class="founder-goals">
+            <h4>Global Expansion Goals</h4>
+            <ul style="list-style:none; margin-top:16px; line-height:2.4; font-size:1.05rem;">
+              <li>🌍 South Asia · 2026</li>
+              <li>🌍 Middle East · 2027</li>
+              <li>🌍 Africa · 2028</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="products" style="background:#f8f9fc;">
+    <div class="container">
+      <h2 class="section-title">Products</h2>
+      <div class="product-scroll" id="productScroll">
+        <div class="product-card-h" data-img="products/Elachi.jpg"><img src="products/Elachi.jpg" alt="spice" /><h4>Cardamom</h4><p>Premium quality</p></div>
+        <div class="product-card-h" data-img="products/Cloves.jpg"><img src="products/Cloves.jpg" alt="blend" /><h4>Cloves</h4><p>Premium quality</p></div>
+        <div class="product-card-h" data-img="products/Whole Spices.jpg"><img src="products/Whole Spices.jpg" alt="Whole Spices" /><h4>Mix Spices</h4><p>Premium quality</p></div>
+        <div class="product-card-h" data-img="products/black papper.jpg"><img src="products/black papper.jpg" alt="black papper" /><h4>Black Pepper</h4><p>Premium quality</p></div>
+        <div class="product-card-h" data-img="products/Cinnamon.jpg"><img src="products/Cinnamon.jpg" alt="Cinnamon" /><h4>Cinnamon</h4><p>Premium quality</p></div>
+        <div class="product-card-h" data-img="products/Bay Leaf.jpg"><img src="products/Bay Leaf.jpg" alt="Bay Leaf" /><h4>Bay Leaf</h4><p>Premium quality</p></div>
+        <div class="product-card-h" data-img="products/Cumin.jpg"><img src="products/Cumin.jpg" alt="Cumin" /><h4>Cumin</h4><p>Premium quality</p></div>
+        <div class="product-card-h" data-img="products/Black Cardamom.jpg"><img src="products/Black Cardamom.jpg" alt="Black Cardamom" /><h4>Black Cardamom</h4><p>Premium quality</p></div>
+        <div class="product-card-h" data-img="products/Star Anise.jpg"><img src="products/Star Anise.jpg" alt="Star Anise" /><h4>Star Anise</h4><p>Premium quality</p></div>
+        <div class="product-card-h" data-img="products/Fennel Seeds.jpg"><img src="products/Fennel Seeds.jpg" alt="Fennel Seeds" /><h4>Fennel Seeds</h4><p>Premium quality</p></div>
+        <div class="product-card-h" data-img="products/Carom Seeds.jpg"><img src="products/Carom Seeds.jpg" alt="Carom Seeds" /><h4>Carom Seeds</h4><p>Premium quality</p></div>
+        <div class="product-card-h" data-img="products/Mace.jpg"><img src="products/Mace.jpg" alt="Mace" /><h4>Mace</h4><p>Premium quality</p></div>
+        <div class="product-card-h" data-img="products/Nutmeg.jpg"><img src="products/Nutmeg.jpg" alt="Nutmeg" /><h4>Nutmeg</h4><p>Premium quality</p></div>
+        <div class="product-card-h" data-img="products/Nigella Seeds.jpg"><img src="products/Nigella Seeds.jpg" alt="Nigella Seeds" /><h4>Nigella Seeds</h4><p>Premium quality</p></div>
+        <div class="product-card-h" data-img="products/Fenugreek Seeds.jpg"><img src="products/Fenugreek Seeds.jpg" alt="Fenugreek Seeds" /><h4>Fenugreek Seeds</h4><p>Premium quality</p></div>
+        <!-- <div class="product-card-h" data-img="products/dehydrated.webp"><img src="products/dehydrated.webp" alt="dehydrated" /><h4>Instant Soups</h4><p>Healthy mixes</p></div> -->
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TRADE SERVICES - Gray cards, zigzag -->
+  <section id="services">
+    <div class="container">
+      <h2 class="section-title">Services</h2>
+      <div class="service-grid trade-services" id="tradeServiceGrid">
+        <div class="service-card"><div class="card-icon"><img src="images/export-icon.webp" alt="export" /></div><div class="card-text"><h4>Export</h4><p>Documentation & compliance</p></div></div>
+        <div class="service-card"><div class="card-icon"><img src="images/packaging-icon.webp" alt="packaging" /></div><div class="card-text"><h4>Packaging</h4><p>Flexible & secure</p></div></div>
+        <div class="service-card"><div class="card-icon"><img src="images/import-icon.webp" alt="import" /></div><div class="card-text"><h4>Import</h4><p>Sourcing worldwide</p></div></div>
+        <div class="service-card"><div class="card-icon"><img src="images/logistics-icon.webp" alt="logistics" /></div><div class="card-text"><h4>Logistics</h4><p>Shipment coordination</p></div></div>
+        <div class="service-card"><div class="card-icon"><img src="images/quality-icon.webp" alt="quality" /></div><div class="card-text"><h4>Quality Control</h4><p>Product inspection</p></div></div>
+        <div class="service-card"><div class="card-icon"><img src="images/vendor-icon.webp" alt="vendor" /></div><div class="card-text"><h4>Vendor Connections</h4><p>Global network</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#eef0f5;">
+    <div class="container" style="text-align:center;">
+      <h2 style="font-size:2.6rem;">Expanding Trade Connections Worldwide</h2>
+      <p style="max-width:600px; margin:20px auto; opacity:0.7;">Building bridges across continents with integrity and excellence.</p>
+      <div class="video-container">
+        <video autoplay loop muted playsinline>
+          <source src="videos/map.mp4" type="video/mp4" />
+          <img src="images/world-map.webp" alt="world map" style="width:100%;" />
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY CHOOSE US - Gray cards, zigzag -->
+  <section id="whychoose">
+    <div class="container">
+      <h2 class="section-title">Why Choose Us</h2>
+      <div class="service-grid why-grid" id="whyGrid">
+        <div class="why-card"><div class="card-icon"><img src="images/supply-chain.webp" alt="supply chain" /></div><h4>Reliable Supply Chain</h4></div>
+        <div class="why-card"><div class="card-icon"><img src="images/pricing.webp" alt="pricing" /></div><h4>Competitive Pricing</h4></div>
+        <div class="why-card"><div class="card-icon"><img src="images/quality-assurance.webp" alt="quality" /></div><h4>Quality Assurance</h4></div>
+        <div class="why-card"><div class="card-icon"><img src="images/support.webp" alt="support" /></div><h4>Professional Support</h4></div>
+        <div class="why-card"><div class="card-icon"><img src="images/flexible.webp" alt="flexible" /></div><h4>Flexible Packaging</h4></div>
+        <div class="why-card"><div class="card-icon"><img src="images/market.webp" alt="market" /></div><h4>Market Expansion</h4></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPORT PROCESS - Gray cards, zigzag, arrows only on mobile -->
+  <section id="process" style="background:#f8f9fc;">
+    <div class="container">
+      <h2 class="section-title">Export Process</h2>
+      <div class="service-grid process-grid" id="processGrid">
+        <div class="process-item-wrapper">
+          <div class="service-card"><div class="card-icon"><img src="images/inquiry.webp" alt="inquiry" /></div><h4>Inquiry</h4></div>
+          <div class="process-arrow"><i class="fas fa-arrow-down"></i></div>
+        </div>
+        <div class="process-item-wrapper">
+          <div class="service-card"><div class="card-icon"><img src="images/quotation.webp" alt="quotation" /></div><h4>Quotation</h4></div>
+          <div class="process-arrow"><i class="fas fa-arrow-down"></i></div>
+        </div>
+        <div class="process-item-wrapper">
+          <div class="service-card"><div class="card-icon"><img src="images/agreement.webp" alt="agreement" /></div><h4>Agreement</h4></div>
+          <div class="process-arrow"><i class="fas fa-arrow-down"></i></div>
+        </div>
+        <div class="process-item-wrapper">
+          <div class="service-card"><div class="card-icon"><img src="images/payment.webp" alt="payment" /></div><h4>Advanced Payment</h4></div>
+          <div class="process-arrow"><i class="fas fa-arrow-down"></i></div>
+        </div>
+        <div class="process-item-wrapper">
+          <div class="service-card"><div class="card-icon"><img src="images/production.webp" alt="production" /></div><h4>Production</h4></div>
+          <div class="process-arrow"><i class="fas fa-arrow-down"></i></div>
+        </div>
+        <div class="process-item-wrapper">
+          <div class="service-card"><div class="card-icon"><img src="images/quality-check.webp" alt="quality check" /></div><h4>Quality Check</h4></div>
+          <div class="process-arrow"><i class="fas fa-arrow-down"></i></div>
+        </div>
+        <div class="process-item-wrapper">
+          <div class="service-card"><div class="card-icon"><img src="images/shipping.webp" alt="shipping" /></div><h4>Shipping</h4></div>
+          <div class="process-arrow"><i class="fas fa-arrow-down"></i></div>
+        </div>
+        <div class="process-item-wrapper">
+          <div class="service-card"><div class="card-icon"><img src="images/delivery.webp" alt="delivery" /></div><h4>Delivery</h4></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="certificates">
+    <div class="container">
+      <h2 class="section-title">Certifications</h2>
+      <div class="cert-grid" id="certGrid">
+        <img src="certificates/gst.webp" alt="GST" />
+        <img src="certificates/fssai.webp" alt="FSSAI" />
+        <img src="certificates/iec.webp" alt="IEC" />
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery" style="background:#f0f2f6;">
+    <div class="container">
+      <h2 class="section-title">Gallery</h2>
+      <div class="gallery-grid" id="galleryGrid">
+        <div class="gallery-item"></div>
+        <div class="gallery-item"></div>
+        <div class="gallery-item"></div>
+        <div class="gallery-item"></div>
+        <div class="gallery-item"></div>
+        <div class="gallery-item"></div>
+      </div>
+      <p style="margin-top:20px; opacity:0.5; text-align:center;">Products · Packaging · Warehouse · Containers · Meetings</p>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <div class="cta-premium">
+        <h2 style="font-size:2.6rem;">Ready to Discuss Your Import or Export Requirements?</h2>
+        <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-top:32px;">
+          <a href="https://wa.me/919769443373" class="btn-outline" style="border-color:white; color:white;" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+          <a href="mailto:shaobaid76@gmail.com" class="btn-outline" style="border-color:white; color:white;">Contact</a>
+        </div>
+        <div style="margin-top:32px; display:flex; justify-content:center; gap:32px; flex-wrap:wrap; font-size:0.95rem;">
+          <span><i class="fas fa-envelope"></i> shaobaid76@gmail.com</span>
+          <span><i class="fas fa-phone"></i> +91 9769443373</span>
+          <span><i class="fas fa-map-pin"></i> Mumbai</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-grid">
+      <div style="display:flex; align-items:center; gap:16px;">
+        <img src="images/logo.webp" alt="Meridian EX-IM" style="height:32px;" />
+        <span style="font-weight:500;">© 2026 Meridian EX‑IM</span>
+      </div>
+      <div class="footer-links">
+        <a onclick="showLegal('privacy')">Privacy</a>
+        <a onclick="showLegal('terms')">Terms</a>
+      </div>
+      <div class="social-icons">
+        <a href="https://www.linkedin.com/in/obaidullah-shaikh/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://www.instagram.com/official_mr_obaid" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.google.com/maps/place/7JFJ3VCP%2BW75X/@19.0722725,72.8857461,18z/data=!3m1!4b1!4m4!3m3!8m2!3d19.0722725!4d72.8857461?entry=ttu&g_ep=EgoyMDI2MDYxMC4wIKXMDSoASAFQAw%3D%3D" target="_blank"><i class="fas fa-map-pin"></i></a>
+        <a href="mailto:shaobaid76@gmail.com"><i class="fas fa-envelope"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="close">&times;</span>
+    <img id="lightboxImg" src="" alt="Product" />
+  </div>
+
+  <div class="legal-overlay" id="legalOverlay" onclick="hideLegal()"></div>
+  <div class="legal-page" id="privacyPage">
+    <h1>Privacy Policy</h1>
+    <p>Meridian EX‑IM respects your privacy. This policy explains how we collect, use, and protect your personal information.</p>
+    <p><strong>Information Collection:</strong> We collect only the data you provide via forms or inquiries.</p>
+    <p><strong>Use of Data:</strong> To respond to your requests and improve our services.</p>
+    <p><strong>Security:</strong> We implement industry-standard measures to protect your data.</p>
+    <p><strong>Cookies:</strong> We use minimal cookies for site functionality.</p>
+    <p><strong>Contact:</strong> For any privacy concerns, email us at shaobaid76@gmail.com.</p>
+    <button class="btn-primary" onclick="hideLegal()" style="margin-top:20px;">Close</button>
+  </div>
+  <div class="legal-page" id="termsPage">
+    <h1>Terms of Service</h1>
+    <p>By using our website and services, you agree to the following terms.</p>
+    <p><strong>Services:</strong> Meridian EX‑IM provides trade consulting, sourcing, and logistics support.</p>
+    <p><strong>Accuracy:</strong> We strive for accuracy but do not guarantee complete error-free information.</p>
+    <p><strong>Limitation:</strong> We are not liable for indirect damages arising from use of our services.</p>
+    <p><strong>Governing Law:</strong> These terms are governed by the laws of the United States.</p>
+    <p><strong>Changes:</strong> We may update these terms periodically; continued use implies acceptance.</p>
+    <button class="btn-primary" onclick="hideLegal()" style="margin-top:20px;">Close</button>
+  </div>
+
+  <script>
+    // ===== LENIS SMOOTH SCROLL =====
+    const lenis = new Lenis({ 
+      duration: 1.0, 
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) 
+    });
+    lenis.on('scroll', (e) => { 
+      document.getElementById('scroll-progress').style.width = (e.progress * 100) + '%'; 
+    });
+    function raf(time) { 
+      lenis.raf(time); 
+      requestAnimationFrame(raf); 
+    }
+    requestAnimationFrame(raf);
+
+    window.addEventListener('load', ()=> { 
+      document.getElementById('loader').classList.add('hidden'); 
+    });
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    // ===== GSAP HERO ANIMATIONS =====
+    gsap.from('.hero-content .sub-head', { opacity:0, y:30, duration:0.8, delay:0.3 });
+    gsap.from('.hero-content p', { opacity:0, y:20, duration:0.8, delay:0.5 });
+    gsap.from('.hero-actions', { opacity:0, y:20, duration:0.8, delay:0.6 });
+    gsap.from('.hero-image', { opacity:0, scale:0.96, duration:1.0, delay:0.2 });
+
+    // ===== MAGNETIC BUTTONS =====
+    document.querySelectorAll('.magnetic').forEach(btn => {
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        btn.style.transform = `translate(${x*12}px, ${y*8}px)`;
+      });
+      btn.addEventListener('mouseleave', () => btn.style.transform = 'translate(0,0)');
+    });
+
+    // ===== CORE NAVIGATION FUNCTION =====
+    function scrollToSection(id) {
+      const target = document.getElementById(id);
+      if (target) {
+        lenis.scrollTo(target, { offset: -60 });
+      }
+      hideLegal();
+      closeSidebar();
+    }
+
+    // ===== DESKTOP NAV LINKS =====
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('data-target');
+        if (targetId) scrollToSection(targetId);
+      });
+    });
+
+    // ===== MOBILE SIDEBAR NAV LINKS - FIXED =====
+    document.querySelectorAll('.sidebar a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('data-target');
+        if (targetId) {
+          // Close sidebar first, then scroll after a tiny delay
+          closeSidebar();
+          // Small delay to allow sidebar close animation to start
+          setTimeout(() => {
+            scrollToSection(targetId);
+          }, 100);
+        }
+      });
+    });
+
+    // ===== LOGO HOME =====
+    document.getElementById('logoHome').addEventListener('click', () => scrollToSection('home'));
+
+    // ===== EXPLORE PRODUCTS BUTTON =====
+    document.getElementById('exploreProductsBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      scrollToSection('products');
+    });
+
+    // ===== TRADE SERVICES ANIMATION =====
+    document.querySelectorAll('#tradeServiceGrid .service-card').forEach((card, i) => {
+      ScrollTrigger.create({
+        trigger: card,
+        start: 'top 90%',
+        onEnter: () => { setTimeout(() => card.classList.add('visible'), i * 120); },
+        onLeave: () => { card.classList.remove('visible'); },
+        onEnterBack: () => { setTimeout(() => card.classList.add('visible'), i * 120); },
+        onLeaveBack: () => { card.classList.remove('visible'); }
+      });
+    });
+
+    // ===== WHY CHOOSE US ANIMATION =====
+    document.querySelectorAll('#whyGrid .why-card').forEach((card, i) => {
+      ScrollTrigger.create({
+        trigger: card,
+        start: 'top 92%',
+        onEnter: () => { setTimeout(() => card.classList.add('visible'), i * 100); },
+        onLeave: () => { card.classList.remove('visible'); },
+        onEnterBack: () => { setTimeout(() => card.classList.add('visible'), i * 100); },
+        onLeaveBack: () => { card.classList.remove('visible'); }
+      });
+    });
+
+    // ===== PROCESS GRID ANIMATION =====
+    document.querySelectorAll('#processGrid .service-card').forEach((card, i) => {
+      ScrollTrigger.create({
+        trigger: card,
+        start: 'top 92%',
+        onEnter: () => { setTimeout(() => card.classList.add('visible'), i * 100); },
+        onLeave: () => { card.classList.remove('visible'); },
+        onEnterBack: () => { setTimeout(() => card.classList.add('visible'), i * 100); },
+        onLeaveBack: () => { card.classList.remove('visible'); }
+      });
+    });
+
+    // ===== CERTIFICATES ANIMATION =====
+    document.querySelectorAll('.cert-grid img').forEach(img => {
+      ScrollTrigger.create({
+        trigger: img,
+        start: 'top 90%',
+        onEnter: () => img.classList.add('visible'),
+        onLeave: () => img.classList.remove('visible'),
+        onEnterBack: () => img.classList.add('visible'),
+        onLeaveBack: () => img.classList.remove('visible')
+      });
+    });
+
+    // ===== GALLERY ANIMATION =====
+    document.querySelectorAll('.gallery-item').forEach((item, i) => {
+      ScrollTrigger.create({
+        trigger: item,
+        start: 'top 92%',
+        onEnter: () => { setTimeout(() => item.classList.add('visible'), i * 80); },
+        onLeave: () => { item.classList.remove('visible'); },
+        onEnterBack: () => { setTimeout(() => item.classList.add('visible'), i * 80); },
+        onLeaveBack: () => { item.classList.remove('visible'); }
+      });
+    });
+
+    // ===== LIGHTBOX =====
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    document.querySelectorAll('.product-card-h').forEach(card => {
+      card.addEventListener('click', function(e) {
+        const imgSrc = this.getAttribute('data-img') || this.querySelector('img')?.src;
+        if (imgSrc) {
+          lightboxImg.src = imgSrc;
+          lightbox.classList.add('active');
+          lenis.stop();
+        }
+      });
+    });
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      lenis.start();
+    }
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+    // ===== SIDEBAR CONTROLS =====
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    function openSidebar() { 
+      sidebar.classList.add('open'); 
+      overlay.classList.add('active'); 
+      lenis.stop(); 
+    }
+    function closeSidebar() { 
+      sidebar.classList.remove('open'); 
+      overlay.classList.remove('active'); 
+      lenis.start(); 
+    }
+    document.getElementById('menuToggle').addEventListener('click', openSidebar);
+    document.getElementById('closeSidebar').addEventListener('click', closeSidebar);
+    overlay.addEventListener('click', closeSidebar);
+
+    // ===== LEGAL PAGES =====
+    function showLegal(type) {
+      document.querySelectorAll('.legal-page').forEach(p => p.classList.remove('active'));
+      document.getElementById('legalOverlay').classList.add('active');
+      if (type === 'privacy') document.getElementById('privacyPage').classList.add('active');
+      else if (type === 'terms') document.getElementById('termsPage').classList.add('active');
+      lenis.stop();
+    }
+    function hideLegal() {
+      document.querySelectorAll('.legal-page').forEach(p => p.classList.remove('active'));
+      document.getElementById('legalOverlay').classList.remove('active');
+      lenis.start();
+    }
+    window.showLegal = showLegal;
+    window.hideLegal = hideLegal;
+    window.scrollToSection = scrollToSection;
+    window.closeLightbox = closeLightbox;
+    window.closeSidebar = closeSidebar;
+
+    // ===== SERVICE WORKER =====
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('SW registered'))
+        .catch(() => console.log('SW registration failed'));
+    }
+  </script>
+</body>
+</html>
