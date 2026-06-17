@@ -65,6 +65,61 @@
     .btn-outline:hover { background: #1a1e2b; color: #fff; transform: scale(1.02); }
     .magnetic { display: inline-block; transition: transform 0.15s ease; cursor: pointer; }
 
+    /* Premium Connect Button */
+    .btn-connect {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 40px;
+      background: linear-gradient(135deg, #1a1e2b 0%, #2d3446 100%);
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.1rem;
+      border-radius: 60px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 4px 20px rgba(26, 30, 43, 0.25);
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 0.5px;
+      text-decoration: none;
+    }
+    .btn-connect::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #6C63FF 0%, #3b82f6 50%, #8b5cf6 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      border-radius: 60px;
+    }
+    .btn-connect:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 40px rgba(108, 99, 255, 0.35);
+      color: #fff;
+    }
+    .btn-connect:hover::before {
+      opacity: 1;
+    }
+    .btn-connect i, .btn-connect span {
+      position: relative;
+      z-index: 1;
+    }
+    .btn-connect i {
+      font-size: 1.3rem;
+      transition: transform 0.3s;
+    }
+    .btn-connect:hover i {
+      transform: translateX(4px) rotate(-5deg);
+    }
+    .btn-connect .arrow-icon {
+      transition: transform 0.3s;
+    }
+    .btn-connect:hover .arrow-icon {
+      transform: translateX(4px);
+    }
+
     #loader {
       position: fixed; inset:0; z-index:9999;
       background: #B2B4BC;
@@ -81,10 +136,18 @@
       width:0%; z-index:999; transition: width 0.1s;
     }
 
+    /* NAV - TRANSPARENT ON HERO */
     nav {
       position: fixed; top:0; left:0; right:0; padding: 12px 20px;
       display: flex; justify-content: space-between; align-items: center;
       z-index:100;
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border-bottom: none;
+      transition: background 0.3s, backdrop-filter 0.3s, border-bottom 0.3s;
+    }
+    nav.scrolled {
       background: rgba(255,255,255,0.15);
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
@@ -170,6 +233,8 @@
       border: none !important;
       outline: none !important;
       display: block;
+      transform: scale(1) !important;
+      transition: none !important;
     }
     .hero-content .sub-head { 
       font-size: 1.8rem; 
@@ -210,7 +275,7 @@
       flex-direction:column; text-align:center;
     }
     .flip-front {
-      background:white;
+      background: #eef0f4;
       padding:0;
     }
     .flip-front img { 
@@ -219,6 +284,7 @@
     .flip-front .founder-info {
       height:15%; display:flex; flex-direction:column; align-items:center; 
       justify-content:center; padding:6px 0;
+      background: #eef0f4;
     }
     .flip-front .founder-name {
       font-weight:700; font-size:1.3rem; letter-spacing:0.04em; color:#1a1e2b;
@@ -240,12 +306,22 @@
       display:grid; grid-template-columns: auto 1fr; gap:40px; align-items:start;
     }
     .founder-message { 
-      background:white; padding:32px; border-radius:24px; 
+      background: #eef0f4;
+      padding:32px; border-radius:24px; 
       box-shadow:0 8px 24px rgba(0,0,0,0.04);
+      border: 1px solid #d9dce4;
     }
+    .founder-message .connect-wrapper {
+      margin-top: 24px;
+      display: flex;
+      justify-content: flex-start;
+    }
+
     .founder-goals {
-      background:white; padding:28px; border-radius:24px; 
+      background: #eef0f4;
+      padding:28px; border-radius:24px; 
       box-shadow:0 8px 20px rgba(0,0,0,0.02);
+      border: 1px solid #d9dce4;
     }
 
     .product-scroll {
@@ -256,16 +332,20 @@
     .product-scroll::-webkit-scrollbar-track { background:#e9ecf0; border-radius:10px; }
     .product-scroll::-webkit-scrollbar-thumb { background:#1a1e2b; border-radius:10px; }
     .product-card-h {
-      flex:0 0 280px; background:white; border-radius:24px; padding:20px;
-      border:1px solid #eee; scroll-snap-align:start; transition:0.3s;
-      box-shadow:0 4px 12px rgba(0,0,0,0.02); cursor:pointer;
+      flex:0 0 280px; background: #eef0f4;
+      border-radius:24px; padding:20px;
+      border:1px solid #d9dce4; scroll-snap-align:start; transition:0.3s;
+      box-shadow:0 4px 12px rgba(0,0,0,0.02); cursor:default;
+      min-height: 360px;
+      display: flex;
+      flex-direction: column;
     }
     .product-card-h:hover { transform:translateY(-8px); box-shadow:0 20px 40px rgba(0,0,0,0.08); }
-    .product-card-h img { width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:16px; background:#f0f2f5; margin-bottom:14px; }
-    .product-card-h h4 { font-size:1.2rem; }
+    .product-card-h img { width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:16px; background:#d9dce4; margin-bottom:14px; }
+    .product-card-h h4 { font-size:1.2rem; margin-top: auto; }
     .product-card-h p { font-size:0.9rem; opacity:0.6; margin:4px 0 10px; }
 
-    /* ----- UNIFIED CARD STYLES (Gray, same height/width) ----- */
+    /* ----- UNIFIED CARD STYLES (Gray, same height/width) - NO IMAGE BOX ----- */
     .service-grid.trade-services,
     .service-grid.why-grid,
     .service-grid.process-grid {
@@ -330,30 +410,30 @@
       transform: translateX(0);
     }
 
-    /* Card icons — 20% image, 80% text area */
+    /* Card icons — big images, no box */
     .service-grid.trade-services .service-card .card-icon,
     .service-grid.why-grid .why-card .card-icon,
     .service-grid.process-grid .service-card .card-icon {
-      width: 20%;
-      max-width: 80px;
-      min-width: 60px;
+      width: 30%;
+      max-width: 100px;
+      min-width: 70px;
       aspect-ratio: 1/1;
-      background: #d9dce4;
-      border-radius: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      font-size: 2rem;
-      color: #1a1e2b;
       flex-shrink: 0;
+      background: transparent !important;
+      border-radius: 0 !important;
     }
     .service-grid.trade-services .service-card .card-icon img,
     .service-grid.why-grid .why-card .card-icon img,
     .service-grid.process-grid .service-card .card-icon img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
+      border-radius: 0 !important;
+      background: transparent !important;
     }
 
     .service-grid.trade-services .service-card .card-text,
@@ -365,7 +445,7 @@
     .service-grid.trade-services .service-card .card-text h4,
     .service-grid.why-grid .why-card h4,
     .service-grid.process-grid .service-card h4 {
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       margin: 0 0 4px 0;
       font-weight: 700;
       letter-spacing: -0.01em;
@@ -373,7 +453,7 @@
     .service-grid.trade-services .service-card .card-text p,
     .service-grid.why-grid .why-card p,
     .service-grid.process-grid .service-card p {
-      font-size: 1rem;
+      font-size: 1.05rem;
       opacity: 0.6;
       margin: 0;
     }
@@ -440,8 +520,24 @@
       background:#1a1e2b; color:white; border-radius:40px; padding:60px 40px;
       text-align:center; margin:40px 0;
     }
-    .cta-premium .btn-outline { border-color:white; color:white; }
-    .cta-premium .btn-outline:hover { background:white; color:#1a1e2b; }
+    .cta-premium .btn-outline { 
+      border-color: white; 
+      color: white; 
+    }
+    .cta-premium .btn-outline:hover { 
+      background: white; 
+      color: #1a1e2b !important; 
+    }
+    /* WhatsApp button hover - green */
+    .cta-premium .btn-whatsapp {
+      border-color: white;
+      color: white;
+    }
+    .cta-premium .btn-whatsapp:hover {
+      background: #25D366;
+      border-color: #25D366;
+      color: white !important;
+    }
 
     footer { background:#f0f2f6; padding:40px 0; border-top:1px solid #ddd; }
     .footer-grid {
@@ -463,16 +559,6 @@
       background:#000;
     }
     .video-container video { width:100%; display:block; aspect-ratio:16/9; object-fit:cover; }
-
-    .lightbox {
-      display: none; position:fixed; inset:0; z-index:1000;
-      background:rgba(0,0,0,0.85); align-items:center; justify-content:center;
-      padding:40px; cursor:pointer;
-    }
-    .lightbox.active { display:flex; }
-    .lightbox img { max-width:90%; max-height:90%; border-radius:16px; object-fit:contain; box-shadow:0 24px 48px rgba(0,0,0,0.3); }
-    .lightbox .close { position:absolute; top:20px; right:30px; font-size:2.5rem; color:white; opacity:0.7; transition:0.3s; }
-    .lightbox .close:hover { opacity:1; }
 
     .legal-page {
       position: fixed; inset:0; z-index:300;
@@ -512,19 +598,53 @@
       .service-grid.process-grid .service-card .card-text {
         margin: 0 !important;
       }
+      .btn-connect {
+        padding: 14px 28px;
+        font-size: 1rem;
+        width: 100%;
+        justify-content: center;
+      }
     }
 
     @media (max-width: 640px) {
       .container { padding: 0 16px; }
-      .hero { padding:70px 0 15px; }
+      
+      /* Hero - standalone, full height, no crop */
+      .hero { 
+        min-height: 100vh; 
+        padding: 80px 0 20px; 
+        justify-content: center;
+      }
+      .hero-image { 
+        max-width: 100%; 
+        padding: 0 10px;
+      }
+      .hero-image img { 
+        height: auto; 
+        width: 100%; 
+        max-height: 260px; 
+        object-fit: contain; 
+      }
+      .hero-content { 
+        padding: 10px 0 0; 
+      }
+      .hero-content .sub-head { 
+        font-size: 1.5rem; 
+      }
+      .hero-content p { 
+        font-size: 1rem; 
+        margin-bottom: 14px; 
+      }
+      
       .section-title { font-size:2rem; margin-bottom:32px; }
       .sidebar { width:280px; right:-280px; }
-      .hero-image img { height: 160px; }
+      
+      /* Cards - bigger images */
       .service-grid.trade-services .service-card,
       .service-grid.why-grid .why-card,
       .service-grid.process-grid .service-card {
-        padding: 16px 18px;
-        gap: 16px;
+        padding: 18px 20px;
+        gap: 18px;
         min-height: 80px;
         max-width: 100%;
         margin: 0 !important;
@@ -535,10 +655,11 @@
       .service-grid.trade-services .service-card .card-icon,
       .service-grid.why-grid .why-card .card-icon,
       .service-grid.process-grid .service-card .card-icon {
-        width: 20%;
-        max-width: 60px;
-        min-width: 50px;
+        width: 25%;
+        max-width: 70px;
+        min-width: 55px;
         aspect-ratio: 1/1;
+        background: transparent !important;
       }
       .service-grid.trade-services .service-card .card-text h4,
       .service-grid.why-grid .why-card h4,
@@ -548,6 +669,41 @@
       .service-grid.trade-services .service-card .card-text p {
         font-size: 0.85rem;
       }
+      
+      /* Product cards - TALLER, GRAY, ONE CARD AT A TIME */
+      .product-scroll {
+        gap: 16px;
+        padding: 8px 4px 20px;
+        scroll-snap-type: x mandatory;
+      }
+      .product-card-h {
+        flex: 0 0 85%;
+        max-width: 340px;
+        padding: 20px;
+        min-height: 420px;
+        margin: 0 auto;
+        scroll-snap-align: center;
+        background: #eef0f4;
+        border: 1px solid #d9dce4;
+        border-radius: 24px;
+        display: flex;
+        flex-direction: column;
+      }
+      .product-card-h img {
+        aspect-ratio: 1/1;
+        min-height: 220px;
+        border-radius: 16px;
+        background: #d9dce4;
+      }
+      .product-card-h h4 {
+        font-size: 1.4rem;
+        margin-top: 10px;
+      }
+      .product-card-h p {
+        font-size: 1rem;
+        margin-top: 2px;
+      }
+      
       /* Show arrows on mobile for process */
       .process-item-wrapper .process-arrow {
         display: block !important;
@@ -572,15 +728,23 @@
       .process-item-wrapper:last-child .process-arrow {
         display: none !important;
       }
-      .gallery-grid { grid-template-columns: 1fr 1fr; gap:16px; max-width:400px; margin:0 auto; }
+      
+      /* Gallery: 1 column on mobile */
+      .gallery-grid { 
+        grid-template-columns: 1fr; 
+        gap: 16px; 
+        max-width: 400px; 
+        margin: 0 auto; 
+      }
+      .gallery-grid .gallery-item {
+        aspect-ratio: 4/3;
+      }
+      
       .cert-grid { gap:40px; }
       .cert-grid img { height:80px; }
       .cta-premium { padding:40px 20px; }
       .footer-grid { flex-direction:column; align-items:center; text-align:center; }
       .footer-links { flex-wrap:wrap; justify-content:center; gap:16px; }
-      .product-card-h { flex:0 0 200px; padding:14px; }
-      .hero-content .sub-head { font-size:1.3rem; }
-      .hero-content p { font-size:1rem; margin-bottom:12px; }
       .hero-actions { gap:10px; }
       
       /* Fix About section mobile visibility */
@@ -612,6 +776,16 @@
         font-size: 0.95rem !important;
         line-height: 2.2 !important;
       }
+      .founder-message .connect-wrapper {
+        justify-content: center;
+      }
+      .btn-connect {
+        padding: 14px 24px;
+        font-size: 0.95rem;
+        width: 100%;
+        justify-content: center;
+        border-radius: 50px;
+      }
       /* Restore zigzag animation on mobile */
       .service-grid.why-grid .why-card,
       .service-grid.process-grid .service-card {
@@ -634,17 +808,42 @@
       }
     }
     @media (max-width: 480px) {
-      .hero-content .sub-head { font-size:1.1rem; }
+      .hero-content .sub-head { font-size:1.2rem; }
       .hero-actions .btn-primary, .hero-actions .btn-outline { padding:10px 18px; font-size:0.8rem; }
-      .product-card-h { flex:0 0 170px; padding:10px; }
+      .hero-image img { max-height: 200px; }
+      .product-card-h {
+        flex: 0 0 88%;
+        max-width: 300px;
+        padding: 16px;
+        min-height: 360px;
+      }
+      .product-card-h img {
+        min-height: 170px;
+      }
+      .product-card-h h4 {
+        font-size: 1.2rem;
+      }
       .loader-logo { width: 100px; }
-      .hero-image img { height: 130px; }
       .flip-card {
         max-width: 280px;
         height: 340px;
       }
       .founder-message, .founder-goals {
         padding: 20px 16px;
+      }
+      .service-grid.trade-services .service-card .card-icon,
+      .service-grid.why-grid .why-card .card-icon,
+      .service-grid.process-grid .service-card .card-icon {
+        max-width: 60px;
+        min-width: 45px;
+      }
+      .btn-connect {
+        padding: 12px 20px;
+        font-size: 0.85rem;
+        gap: 8px;
+      }
+      .btn-connect i {
+        font-size: 1rem;
       }
     }
   </style>
@@ -655,7 +854,7 @@
   </div>
   <div id="scroll-progress"></div>
 
-  <nav>
+  <nav id="navbar">
     <div class="nav-logo" id="logoHome">
       <img src="images/logo.webp" alt="Meridian EX-IM" />
     </div>
@@ -732,6 +931,14 @@
               <span><strong>Vision:</strong> Empower 1000+ suppliers</span>
               <span><strong>Future:</strong> Expand to 20+ markets</span>
             </div>
+            <!-- Premium Connect Button -->
+            <div class="connect-wrapper">
+              <a href="https://obaidshaikh.vercel.app/" target="_blank" class="btn-connect magnetic">
+                <i class="fas fa-user-tie"></i>
+                <span>Connect with Founder</span>
+                <i class="fas fa-arrow-right arrow-icon"></i>
+              </a>
+            </div>
           </div>
           <div class="founder-goals">
             <h4>Global Expansion Goals</h4>
@@ -750,21 +957,21 @@
     <div class="container">
       <h2 class="section-title">Products</h2>
       <div class="product-scroll" id="productScroll">
-        <div class="product-card-h" data-img="products/Elachi.jpg"><img src="products/Elachi.jpg" alt="spice" /><h4>Cardamom</h4><p>Premium quality</p></div>
-        <div class="product-card-h" data-img="products/Cloves.jpg"><img src="products/Cloves.jpg" alt="blend" /><h4>Cloves</h4><p>Premium quality</p></div>
-        <div class="product-card-h" data-img="products/Whole Spices.jpg"><img src="products/Whole Spices.jpg" alt="Whole Spices" /><h4>Mix Spices</h4><p>Premium quality</p></div>
-        <div class="product-card-h" data-img="products/black papper.jpg"><img src="products/black papper.jpg" alt="black papper" /><h4>Black Pepper</h4><p>Premium quality</p></div>
-        <div class="product-card-h" data-img="products/Cinnamon.jpg"><img src="products/Cinnamon.jpg" alt="Cinnamon" /><h4>Cinnamon</h4><p>Premium quality</p></div>
-        <div class="product-card-h" data-img="products/Bay Leaf.jpg"><img src="products/Bay Leaf.jpg" alt="Bay Leaf" /><h4>Bay Leaf</h4><p>Premium quality</p></div>
-        <div class="product-card-h" data-img="products/Cumin.jpg"><img src="products/Cumin.jpg" alt="Cumin" /><h4>Cumin</h4><p>Premium quality</p></div>
-        <div class="product-card-h" data-img="products/Black Cardamom.jpg"><img src="products/Black Cardamom.jpg" alt="Black Cardamom" /><h4>Black Cardamom</h4><p>Premium quality</p></div>
-        <div class="product-card-h" data-img="products/Star Anise.jpg"><img src="products/Star Anise.jpg" alt="Star Anise" /><h4>Star Anise</h4><p>Premium quality</p></div>
-        <div class="product-card-h" data-img="products/Fennel Seeds.jpg"><img src="products/Fennel Seeds.jpg" alt="Fennel Seeds" /><h4>Fennel Seeds</h4><p>Premium quality</p></div>
-        <div class="product-card-h" data-img="products/Carom Seeds.jpg"><img src="products/Carom Seeds.jpg" alt="Carom Seeds" /><h4>Carom Seeds</h4><p>Premium quality</p></div>
-        <div class="product-card-h" data-img="products/Mace.jpg"><img src="products/Mace.jpg" alt="Mace" /><h4>Mace</h4><p>Premium quality</p></div>
-        <div class="product-card-h" data-img="products/Nutmeg.jpg"><img src="products/Nutmeg.jpg" alt="Nutmeg" /><h4>Nutmeg</h4><p>Premium quality</p></div>
-        <div class="product-card-h" data-img="products/Nigella Seeds.jpg"><img src="products/Nigella Seeds.jpg" alt="Nigella Seeds" /><h4>Nigella Seeds</h4><p>Premium quality</p></div>
-        <div class="product-card-h" data-img="products/Fenugreek Seeds.jpg"><img src="products/Fenugreek Seeds.jpg" alt="Fenugreek Seeds" /><h4>Fenugreek Seeds</h4><p>Premium quality</p></div>
+        <div class="product-card-h"><img src="products/Elachi.jpg" alt="spice" /><h4>Cardamom</h4><p>Premium quality</p></div>
+        <div class="product-card-h"><img src="products/Cloves.jpg" alt="blend" /><h4>Cloves</h4><p>Premium quality</p></div>
+        <div class="product-card-h"><img src="products/Whole Spices.jpg" alt="Whole Spices" /><h4>Mix Spices</h4><p>Premium quality</p></div>
+        <div class="product-card-h"><img src="products/black papper.jpg" alt="black papper" /><h4>Black Pepper</h4><p>Premium quality</p></div>
+        <div class="product-card-h"><img src="products/Cinnamon.jpg" alt="Cinnamon" /><h4>Cinnamon</h4><p>Premium quality</p></div>
+        <div class="product-card-h"><img src="products/Bay Leaf.jpg" alt="Bay Leaf" /><h4>Bay Leaf</h4><p>Premium quality</p></div>
+        <div class="product-card-h"><img src="products/Cumin.jpg" alt="Cumin" /><h4>Cumin</h4><p>Premium quality</p></div>
+        <div class="product-card-h"><img src="products/Black Cardamom.jpg" alt="Black Cardamom" /><h4>Black Cardamom</h4><p>Premium quality</p></div>
+        <div class="product-card-h"><img src="products/Star Anise.jpg" alt="Star Anise" /><h4>Star Anise</h4><p>Premium quality</p></div>
+        <div class="product-card-h"><img src="products/Fennel Seeds.jpg" alt="Fennel Seeds" /><h4>Fennel Seeds</h4><p>Premium quality</p></div>
+        <div class="product-card-h"><img src="products/Carom Seeds.jpg" alt="Carom Seeds" /><h4>Carom Seeds</h4><p>Premium quality</p></div>
+        <div class="product-card-h"><img src="products/Mace.jpg" alt="Mace" /><h4>Mace</h4><p>Premium quality</p></div>
+        <div class="product-card-h"><img src="products/Nutmeg.jpg" alt="Nutmeg" /><h4>Nutmeg</h4><p>Premium quality</p></div>
+        <div class="product-card-h"><img src="products/Nigella Seeds.jpg" alt="Nigella Seeds" /><h4>Nigella Seeds</h4><p>Premium quality</p></div>
+        <div class="product-card-h"><img src="products/Fenugreek Seeds.jpg" alt="Fenugreek Seeds" /><h4>Fenugreek Seeds</h4><p>Premium quality</p></div>
       </div>
     </div>
   </section>
@@ -884,8 +1091,8 @@
       <div class="cta-premium">
         <h2 style="font-size:2.6rem;">Ready to Discuss Your Import or Export Requirements?</h2>
         <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-top:32px;">
-          <a href="https://wa.me/919769443373" class="btn-outline" style="border-color:white; color:white;" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-          <a href="mailto:shaobaid76@gmail.com" class="btn-outline" style="border-color:white; color:white;">Contact</a>
+          <a href="https://wa.me/919769443373" class="btn-outline btn-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+          <a href="mailto:shaobaid76@gmail.com" class="btn-outline">Contact</a>
         </div>
         <div style="margin-top:32px; display:flex; justify-content:center; gap:32px; flex-wrap:wrap; font-size:0.95rem;">
           <span><i class="fas fa-envelope"></i> shaobaid76@gmail.com</span>
@@ -915,11 +1122,6 @@
     </div>
   </footer>
 
-  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-    <span class="close">&times;</span>
-    <img id="lightboxImg" src="" alt="Product" />
-  </div>
-
   <div class="legal-overlay" id="legalOverlay" onclick="hideLegal()"></div>
   <div class="legal-page" id="privacyPage">
     <h1>Privacy Policy</h1>
@@ -943,10 +1145,12 @@
   </div>
 
   <script>
-    // ===== LENIS SMOOTH SCROLL =====
+    // ===== LENIS SMOOTH SCROLL - SLOW & SMOOTH =====
     const lenis = new Lenis({ 
-      duration: 1.0, 
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) 
+      duration: 2.2, 
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 0.6,
     });
     lenis.on('scroll', (e) => { 
       document.getElementById('scroll-progress').style.width = (e.progress * 100) + '%'; 
@@ -962,6 +1166,17 @@
     });
 
     gsap.registerPlugin(ScrollTrigger);
+
+    // ===== NAVBAR SCROLL EFFECT =====
+    const navbar = document.getElementById('navbar');
+    let heroHeight = document.querySelector('.hero').offsetHeight;
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > heroHeight - 100) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
 
     // ===== GSAP HERO ANIMATIONS =====
     gsap.from('.hero-content .sub-head', { opacity:0, y:30, duration:0.8, delay:0.3 });
@@ -1082,25 +1297,6 @@
       });
     });
 
-    // ===== LIGHTBOX =====
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightboxImg');
-    document.querySelectorAll('.product-card-h').forEach(card => {
-      card.addEventListener('click', function(e) {
-        const imgSrc = this.getAttribute('data-img') || this.querySelector('img')?.src;
-        if (imgSrc) {
-          lightboxImg.src = imgSrc;
-          lightbox.classList.add('active');
-          lenis.stop();
-        }
-      });
-    });
-    function closeLightbox() {
-      lightbox.classList.remove('active');
-      lenis.start();
-    }
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
-
     // ===== SIDEBAR CONTROLS =====
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebarOverlay');
@@ -1134,7 +1330,6 @@
     window.showLegal = showLegal;
     window.hideLegal = hideLegal;
     window.scrollToSection = scrollToSection;
-    window.closeLightbox = closeLightbox;
     window.closeSidebar = closeSidebar;
 
     // ===== SERVICE WORKER =====
