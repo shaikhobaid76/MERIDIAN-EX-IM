@@ -3,6 +3,7 @@ const urlsToCache = [
   '/',
   '/index.html',
   '/images/logo.webp',
+  '/images/logo1.webp',
   '/images/favicon.webp',
   '/images/hero.webp',
   '/images/founder.webp',
